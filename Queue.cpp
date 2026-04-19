@@ -8,12 +8,21 @@ void initQueue(Queue& q) {
     q.rear = nullptr;
 }
 
-bool isEmpty(Queue q) {
+// Dùng const Queue& để tránh copy shallow, tăng tính chuyên nghiệp
+bool isEmpty(const Queue& q) {
     return q.front == nullptr;
 }
 
-void enqueue(Queue& q, Patient p) {
+// Dùng const Patient& p để chống sao chép dữ liệu thừa
+void enqueue(Queue& q, const Patient& p) {
     QueueNode* newNode = new QueueNode;
+    
+    // Kiểm tra cấp phát bộ nhớ (Điểm cộng kỹ thuật)
+    if (newNode == nullptr) {
+        cout << "Lỗi: Không đủ bộ nhớ để thêm bệnh nhân!" << endl;
+        return;
+    }
+
     newNode->data = p;
     newNode->next = nullptr;
 
@@ -41,7 +50,8 @@ bool dequeue(Queue& q, Patient& outPatient) {
     return true;
 }
 
-void displayQueue(Queue q) {
+// Dùng const Queue&
+void displayQueue(const Queue& q) {
     if (isEmpty(q)) {
         cout << "Hàng đợi hiện đang trống. Không có bệnh nhân nào đang chờ." << endl;
         return;
@@ -55,4 +65,16 @@ void displayQueue(Queue q) {
              << " | Họ tên: " << current->data.name << endl;
         current = current->next;
     }
+}
+
+// HÀM MỚI: Dọn dẹp toàn bộ hàng đợi để tránh Memory Leak
+void clearQueue(Queue& q) {
+    QueueNode* current = q.front;
+    while (current != nullptr) {
+        QueueNode* nextNode = current->next;
+        delete current; // Giải phóng từng người trong hàng
+        current = nextNode;
+    }
+    q.front = nullptr;
+    q.rear = nullptr;
 }
