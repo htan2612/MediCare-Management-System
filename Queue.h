@@ -14,9 +14,10 @@ struct Queue {
 };
 
 void initQueue(Queue& q);
-bool isEmpty(Queue q);
-void enqueue(Queue& q, Patient p);
+bool isEmpty(const Queue& q); // Thêm const &
+void enqueue(Queue& q, const Patient& p); // Thêm const &
 bool dequeue(Queue& q, Patient& outPatient);
-void displayQueue(Queue q);
+void displayQueue(const Queue& q); // Thêm const &
+void clearQueue(Queue& q); // Hàm mới thêm
 
 #endif
