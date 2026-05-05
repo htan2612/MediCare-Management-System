@@ -14,7 +14,10 @@ void buildStats(Patient patientList[], int n, int stats[31][12]) {
 
         while (cur != nullptr) {
             string date = cur->date;
-
+            if (date.size() < 5) { 
+                cur = cur->next; 
+                continue;  
+            }
             int day   = stoi(date.substr(0, 2));
             int month = stoi(date.substr(3, 2));
 
