@@ -4,7 +4,7 @@
 #include <string>
 using namespace std;
 
-struct VisitNode; // Forward declaration
+struct VisitNode;
 
 struct Patient {
     string id;

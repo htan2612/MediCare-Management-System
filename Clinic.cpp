@@ -5,10 +5,6 @@
 #include <conio.h>
 using namespace std;
 
-// -------------------------------------------------
-//  LOW-LEVEL HELPERS
-// -------------------------------------------------
-
 void gotoxy(int x, int y) {
     COORD c = { (SHORT)x, (SHORT)y };
     SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), c);
@@ -27,26 +23,19 @@ void clearLine(int y, int width) {
     for (int i = 0; i < width; i++) cout << ' ';
 }
 
-// -------------------------------------------------
-//  BOX DRAWING  (double-line border, Unicode)
-// -------------------------------------------------
-
 void drawBox(int x, int y, int w, int h, int color) {
     setColor(color);
 
-    // top edge
     gotoxy(x, y);
     cout << (char)201;
     for (int i = 0; i < w; i++) cout << (char)205;
     cout << (char)187;
 
-    // sides
     for (int i = 1; i <= h; i++) {
         gotoxy(x,     y + i); cout << (char)186;
         gotoxy(x+w+1, y + i); cout << (char)186;
     }
 
-    // bottom edge
     gotoxy(x, y + h + 1);
     cout << (char)200;
     for (int i = 0; i < w; i++) cout << (char)205;
@@ -55,12 +44,7 @@ void drawBox(int x, int y, int w, int h, int color) {
     resetColor();
 }
 
-// -------------------------------------------------
-//  HEADER  (pure ASCII art, centred, works on any font)
-// -------------------------------------------------
-
 void drawHeader() {
-    // Outer frame (box-drawing chars - CP437, always available)
     setColor(6);
     gotoxy(1, 0);  cout << (char)201; for(int i=0;i<78;i++) cout<<(char)205; cout<<(char)187;
     gotoxy(1, 8);  cout << (char)200; for(int i=0;i<78;i++) cout<<(char)205; cout<<(char)188;
@@ -69,29 +53,20 @@ void drawHeader() {
         gotoxy(80,r); cout<<(char)186;
     }
 
-    //  Pure ASCII logo - 48 chars wide, start col 16 (centred in 80)
-    //   ___ _    ___ _  _ ___ ___
-    //  / __| |  |_ _| \| |_ _/ __|
-    // | (__| |__ | || .` || | (__
-    //  \___|____|___|_|\_|___\___|
-    setColor(14);  // bright yellow
+    setColor(14);
     gotoxy(16, 1); cout << "   ___  _     ___  _  _ ___  ___        ";
     gotoxy(16, 2); cout << "  / __|| |   |_ _|| \\| ||_ _|/ __|      ";
     gotoxy(16, 3); cout << " | (__ | |__  | | | .` | | || (__       ";
     gotoxy(16, 4); cout << "  \\___||____||___||_|\\_||___|\\___|      ";
 
-    setColor(11);  // bright cyan
+    setColor(11);
     gotoxy(19, 5); cout << "C L I N I C   M A N A G E M E N T   S Y S T E M";
 
-    setColor(8);   // grey
+    setColor(8);
     gotoxy(22, 6); cout << "Fundamental of Programming  |  2026";
 
     resetColor();
 }
-
-// -------------------------------------------------
-//  FOOTER
-// -------------------------------------------------
 
 void drawFooter(int y) {
     setColor(8);
@@ -110,13 +85,9 @@ void drawDivider(int y, int width, int color) {
     resetColor();
 }
 
-// -------------------------------------------------
-//  SECTION HEADER  (inside a sub-menu)
-// -------------------------------------------------
-
 void printSectionHeader(const string& title) {
     int pad = (int)(76 - title.size()) / 2;
-    setColor(0, 11);  // black text on bright-cyan BG
+    setColor(0, 11);
     cout << "\n  ";
     for (int i = 0; i < pad; i++) cout << ' ';
     cout << " " << title << " ";
@@ -125,10 +96,6 @@ void printSectionHeader(const string& title) {
     resetColor();
     cout << "\n";
 }
-
-// -------------------------------------------------
-//  BANNER  (startup screen)
-// -------------------------------------------------
 
 void showBanner() {
     system("cls");
@@ -148,10 +115,6 @@ void showBanner() {
     Sleep(600);
     resetColor();
 }
-
-// -------------------------------------------------
-//  LOADING / STATUS MESSAGES
-// -------------------------------------------------
 
 void showLoading(const string& msg) {
     setColor(13);
@@ -183,17 +146,11 @@ void showInfo(const string& msg) {
     resetColor();
 }
 
-// -------------------------------------------------
-//  INTERACTIVE ARROW-KEY MENU
-//  Returns 1-based index of chosen option (0 = ESC)
-// -------------------------------------------------
-
 int runMenu(const char* title, const char* options[], int count, int startY) {
     int pointer = 0;
 
-    // Draw title bar
     int titlePad = (int)(74 - strlen(title)) / 2;
-    setColor(0, 6);  // black on yellow
+    setColor(0, 6);
     gotoxy(3, startY - 2);
     cout << "  ";
     for (int i = 0; i < titlePad; i++) cout << ' ';
@@ -206,31 +163,30 @@ int runMenu(const char* title, const char* options[], int count, int startY) {
         for (int i = 0; i < count; i++) {
             gotoxy(8, startY + i);
             if (i == pointer) {
-                setColor(0, 14);   // black on bright-yellow = selected
+                setColor(0, 14);
                 cout << "  > " << options[i] << "  ";
             } else {
-                setColor(15, 0);   // white on black
+                setColor(15, 0);
                 cout << "    " << options[i] << "  ";
             }
         }
         resetColor();
 
-        // Navigation hint on last item row + 2
         gotoxy(8, startY + count + 1);
         setColor(8);
         cout << "  Use arrow keys to navigate, Enter to confirm";
         resetColor();
 
         int key = _getch();
-        if (key == 0 || key == 224) key = _getch();  // extended key
+        if (key == 0 || key == 224) key = _getch();
 
-        if (key == 72 || key == 'w' || key == 'W') {   // UP
+        if (key == 72 || key == 'w' || key == 'W') {
             pointer = (pointer > 0) ? pointer - 1 : count - 1;
-        } else if (key == 80 || key == 's' || key == 'S') {  // DOWN
+        } else if (key == 80 || key == 's' || key == 'S') {
             pointer = (pointer < count - 1) ? pointer + 1 : 0;
-        } else if (key == 13) {   // ENTER
+        } else if (key == 13) {
             return pointer + 1;
-        } else if (key == 27) {   // ESC
+        } else if (key == 27) {
             return 0;
         }
     }

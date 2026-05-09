@@ -50,7 +50,6 @@ static void swapPatientData(Patient& a, Patient& b) {
     swap(a.historyHead, b.historyHead);
 }
 
-// --- Quick Sort by Name (A-Z) ---
 static int partitionByName(PatientList& list, int low, int high) {
     string pivot = list.data[high].name;
     int i = low - 1;
@@ -72,7 +71,6 @@ static void quickSortByName(PatientList& list, int low, int high) {
     }
 }
 
-// --- Quick Sort by Age (descending) ---
 static int partitionByAge(PatientList& list, int low, int high) {
     int pivot = list.data[high].age;
     int i     = low - 1;

@@ -6,10 +6,6 @@
 #include <iomanip>
 using namespace std;
 
-// -----------------------------------------------
-//  HELPERS
-// -----------------------------------------------
-
 static void pause() {
     setColor(8);
     cout << "\n  Press any key to continue...";
@@ -17,10 +13,6 @@ static void pause() {
     _getch();
     system("cls");
 }
-
-// -----------------------------------------------
-//  MENU 1 - PATIENT MANAGEMENT
-// -----------------------------------------------
 
 static void menuPatient(PatientList& pl) {
     const char* opts[] = {
@@ -104,10 +96,6 @@ static void menuPatient(PatientList& pl) {
     }
 }
 
-// -----------------------------------------------
-//  MENU 2 - EXAMINATION QUEUE
-// -----------------------------------------------
-
 static void menuQueue(Queue& q, PatientList& pl) {
     const char* opts[] = {
         "Add patient to queue  (Enqueue)",
@@ -171,10 +159,6 @@ static void menuQueue(Queue& q, PatientList& pl) {
     }
 }
 
-// -----------------------------------------------
-//  MENU 4 - VISIT HISTORY
-// -----------------------------------------------
-
 static void menuHistory(PatientList& pl) {
     const char* opts[] = {
         "View visit history for patient ",
@@ -224,10 +208,6 @@ static void menuHistory(PatientList& pl) {
     }
 }
 
-// -----------------------------------------------
-//  MENU 5 - STATISTICS & REPORTS
-// -----------------------------------------------
-
 static void menuStats(PatientList& pl, int stats[31][12]) {
     const char* opts[] = {
         "Visit statistics by day/month  ",
@@ -265,18 +245,12 @@ static void menuStats(PatientList& pl, int stats[31][12]) {
     }
 }
 
-// -----------------------------------------------
-//  MAIN
-// -----------------------------------------------
-
 int main() {
-    SetConsoleOutputCP(437);     // ensure box-drawing chars render
+    SetConsoleOutputCP(437);
     SetConsoleCP(437);
 
-    // Resize console to comfortable width
     system("mode con: cols=82 lines=26");
 
-    // -- Initialise data structures --
     PatientList patientList;
     initPatientList(patientList);
 
@@ -288,14 +262,12 @@ int main() {
 
     int stats[31][12] = {};
 
-    // -- Boot banner + load save file --
     showBanner();
     system("cls");
     printSectionHeader("LOADING SAVED DATA");
     loadPatientsFromBin(patientList, "patients.bin");
     Sleep(800);
 
-    // -- Main menu --
     const char* mainOpts[] = {
         "Patient Management    (CRUD + Arrays)    ",
         "Examination Queue     (Queue - FIFO)     ",
@@ -327,12 +299,10 @@ int main() {
         }
     }
 
-    // -- Shutdown --
     system("cls");
     showLoading("Saving data...");
     savePatientsToBin(patientList, "patients.bin");
 
-    // Free all memory
     for (int i = 0; i < patientList.count; i++)
         deleteVisitHistory(patientList.data[i]);
     freePatientList(patientList);

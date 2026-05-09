@@ -47,7 +47,6 @@ void exportReport(Patient patientList[], int n, int stats[31][12], const string&
              << p.symptoms << "\n";
     }
 
-    // --- Section 2: Visit Histories ---
     file << "\n------------------------------------------------------------\n";
     file << "  SECTION 2 — VISIT HISTORIES\n";
     file << "------------------------------------------------------------\n";
@@ -68,7 +67,6 @@ void exportReport(Patient patientList[], int n, int stats[31][12], const string&
         }
     }
 
-    // --- Section 3: Statistics ---
     file << "\n------------------------------------------------------------\n";
     file << "  SECTION 3 — VISIT STATISTICS (BY DAY & MONTH)\n";
     file << "------------------------------------------------------------\n";

@@ -14,29 +14,24 @@
 #include "History.h"
 #include "Queue.h"
 
-// Console UI helpers
 void gotoxy(int x, int y);
 void setColor(int fg, int bg = 0);
 void resetColor();
 void clearLine(int y, int width = 80);
 
-// UI components
 void drawBox(int x, int y, int w, int h, int color = 11);
 void drawHeader();
 void drawFooter(int y);
 void drawDivider(int y, int width = 78, int color = 8);
 
-// Banner & animation
 void showBanner();
 void showLoading(const string& msg = "Processing...");
 void showSuccess(const string& msg);
 void showError(const string& msg);
 void showInfo(const string& msg);
 
-// Menu
 int runMenu(const char* title, const char* options[], int count, int startY = 10);
 
-// Section headers
 void printSectionHeader(const string& title);
 
 #endif
