@@ -31,10 +31,8 @@ MediCare-Management-System/
 │   ├── Medicine.h / Medicine.cpp
 │   ├── Statistics.h / Statistics.cpp
 │   └── Reports.h / Reports.cpp
-├── report/
-│   ├── report.tex
+├── report
 │   ├── report.pdf
-│   └── logo_khtn.png
 ├── video/
 │   └── link.txt
 └── README.md
@@ -105,9 +103,7 @@ g++ src/*.cpp -o Clinic
 | `src/Reports.h/cpp` | Export full report to `.txt` with timestamp | G2.3 |
 | `src/Clinic.h/cpp` | Console UI: box drawing, colours, arrow-key menus | G4.1 |
 | `src/main.cpp` | Program entry point - wires all modules together | G4.1 |
-| `report/report.tex` | LaTeX source for the project report | - |
 | `report/report.pdf` | Compiled project report (PDF) | - |
-| `report/logo_khtn.png` | University logo used in report cover page | - |
 | `video/link.txt` | YouTube demo video link | - |
 
 ---
