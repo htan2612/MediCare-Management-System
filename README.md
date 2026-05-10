@@ -31,8 +31,8 @@ MediCare-Management-System/
 │   ├── Medicine.h / Medicine.cpp
 │   ├── Statistics.h / Statistics.cpp
 │   └── Reports.h / Reports.cpp
-├── report
-│   ├── report.pdf
+├── report/
+│   └── Report.pdf
 ├── video/
 │   └── link.txt
 └── README.md
@@ -42,68 +42,67 @@ MediCare-Management-System/
 
 ## Build & Run
 
+### Requirements
+
+- **Compiler:** MinGW g++ (recommended: via [MSYS2](https://www.msys2.org/))
+- **OS:** Windows 10/11
+- **Terminal:** [Windows Terminal](https://aka.ms/terminal) (Microsoft Store)
+
+> The UI relies on Windows-only APIs (`<windows.h>`, `_getch`, `SetConsoleTextAttribute`,
+> `SetConsoleCursorPosition`). The program is Windows-only by design.
+
 ### 1. Compile
 
-Navigate into `src/` first, then compile:
-
-```bash
+**Option A - from inside `src/`:**
+```powershell
 cd src
-g++ *.cpp -o ../Clinic.exe
+g++ *.cpp -o ../Clinic.exe -std=c++14
 ```
 
-Or compile from the project root:
-
-```bash
-g++ src/*.cpp -o Clinic.exe
+**Option B - from project root:**
+```powershell
+g++ src/*.cpp -o Clinic.exe -std=c++14
 ```
+
+> **Note:** Pass `-std=c++14` to avoid a `byte` ambiguity conflict between `std::byte` (C++17)
+> and `byte` defined in `rpcndr.h` on MSYS2/UCRT64 toolchains (g++ 15+).
 
 ### 2. Run
 
 **Standard launch** (from project root):
-```bash
-Clinic.exe
+```powershell
+.\Clinic.exe
 ```
 
 **Open in a new Windows Terminal tab (recommended):**
-```bash
-wt -w 0 new-tab cmd /k Clinic.exe
+```powershell
+wt -w 0 new-tab cmd /k "cd /d %CD% && Clinic.exe"
 ```
 
 > Running in a dedicated tab ensures the console is sized correctly (82x26),
 > the CP437 code page loads properly, and box-drawing characters render as intended.
-> Requires **Windows Terminal** - install from the Microsoft Store if not already present.
 
-> `patients.bin` (save data) is created in the same directory where `Clinic.exe` is run,
-> i.e. the project root.
-
-### 3. Linux / macOS
-
-> The UI relies on Windows-only APIs (`_getch`, `SetConsoleTextAttribute`, `SetConsoleCursorPosition`).
-> On Linux or macOS, use **WSL** or port those calls to ncurses equivalents before compiling.
-
-```bash
-g++ src/*.cpp -o Clinic
-./Clinic
-```
+> `patients.bin` (save data) is written to the same directory where `Clinic.exe` is launched -
+> always run from the **project root**.
 
 ---
 
-## File Structure
+## File Overview
 
-| File | Description | Learning Outcome |
+| File | Description | LO |
 |:---|:---|:---:|
 | `src/Patient.h` | Core structs: `Patient`, `PatientList` | - |
-| `src/History.h/cpp` | Linked list - visit history per patient | G3.1 |
+| `src/History.h/cpp` | Singly linked list - visit history per patient | G3.1 |
 | `src/PatientCRUD.h/cpp` | Add / View / Edit / Delete + dynamic array resize | G1.2, G1.3 |
 | `src/PatientSearchSort.h/cpp` | Search by name/ID + Quick Sort by name & age | G1.4, G2.1 |
-| `src/PatientFile.h/cpp` | Binary file save/load **including visit history** | G2.3 |
+| `src/PatientFile.h/cpp` | Binary file save/load including visit history | G2.3 |
 | `src/Queue.h/cpp` | FIFO examination queue (linked-list nodes) | G3.2 |
-| `src/Medicine.h/cpp` | LIFO medicine stack + interactive menu | G3.2 |
-| `src/Statistics.h/cpp` | 2D visit statistics + safe date parsing | G1.4 |
-| `src/Reports.h/cpp` | Export full report to `.txt` with timestamp | G2.3 |
+| `src/Medicine.h/cpp` | LIFO medicine stack + interactive sub-menu | G3.2 |
+| `src/Statistics.h/cpp` | 2D visit-count array + safe date parsing | G1.4 |
+| `src/Reports.h/cpp` | Export timestamped `.txt` report | G2.3 |
 | `src/Clinic.h/cpp` | Console UI: box drawing, colours, arrow-key menus | G4.1 |
-| `src/main.cpp` | Program entry point - wires all modules together | G4.1 |
-| `report/report.pdf` | Compiled project report (PDF) | - |
+| `src/main.cpp` | Entry point - wires all modules together | G4.1 |
+| `report/Report.pdf` | Compiled project report (PDF) | - |
 | `video/link.txt` | YouTube demo video link | - |
 
 ---
@@ -111,11 +110,11 @@ g++ src/*.cpp -o Clinic
 ## Features
 
 1. **Patient CRUD** - add, view, edit, and delete records with duplicate-ID check and input validation
-2. **Binary persistence** - full patient data and visit histories saved across sessions
+2. **Binary persistence** - full patient data and visit histories saved to `patients.bin` across sessions
 3. **Search & Sort** - case-insensitive name search; Quick Sort by name (A-Z) or age (descending)
 4. **Examination Queue (FIFO)** - enqueue patients on arrival, call next, record visit on dequeue
 5. **Visit History (Linked List)** - per-patient singly linked list; view and clear
 6. **Medicine Storage (Stack / LIFO)** - push / pop / peek with quantity validation
 7. **Statistics (2D Array)** - visit counts aggregated by day x month with safe date parsing
-8. **Report Export** - timestamped `.txt` report containing patients, visit histories, and statistics
+8. **Report Export** - timestamped `.txt` report containing patient records, visit histories, and statistics
 9. **Modular code** - every feature in its own `.h` / `.cpp` pair with clean header guards
