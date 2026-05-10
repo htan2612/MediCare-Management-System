@@ -1,4 +1,5 @@
 #include "Medicine.h"
+#include "Clinic.h"
 #include <iostream>
 #include <iomanip>
 using namespace std;
@@ -74,56 +75,78 @@ void clearMedicineStack(MedicineStack& s) {
     s.count = 0;
 }
 
+static void medicinePause() {
+    setColor(8);
+    cout << "\n  Press any key to continue...";
+    resetColor();
+    _getch();
+    system("cls");
+}
+
 void medicineMenu(MedicineStack& s) {
-    int choice;
-    do {
-        cout << "\n  +------------------------------------------+\n";
-        cout << "  |    MEDICINE STORAGE  (Stack - LIFO)      |\n";
-        cout << "  +------------------------------------------+\n";
-        cout << "  |  1. Import medicine (Push)               |\n";
-        cout << "  |  2. Dispense medicine (Pop - LIFO)       |\n";
-        cout << "  |  3. View top of stack (Peek)             |\n";
-        cout << "  |  4. View all medicine                    |\n";
-        cout << "  |  0. Back to main menu                    |\n";
-        cout << "  +------------------------------------------+\n";
-        cout << "  Choice (0-4): ";
-        cin >> choice;
-        cin.ignore();
-        cout << "\n";
+    const char* opts[] = {
+        "Import medicine       (Push)   ",
+        "Dispense medicine     (Pop)    ",
+        "View top of stack     (Peek)   ",
+        "View all medicine              ",
+        "Back to main menu              "
+    };
+    const int N = 5;
 
-        if (choice == 1) {
-            MedicineItem item;
-            cout << "  Medicine Name  : "; getline(cin, item.name);
-            if (item.name.empty()) { cout << "  [!] Name cannot be empty.\n"; continue; }
+    while (true) {
+        system("cls");
+        drawHeader();
+        drawFooter(22);
 
-            cout << "  Quantity       : ";
-            while (!(cin >> item.quantity) || item.quantity <= 0) {
-                cin.clear(); cin.ignore(1000, '\n');
-                cout << "  Invalid quantity. Try again: ";
+        int choice = runMenu("MEDICINE STORAGE  (Stack - LIFO)", opts, N, 11);
+        if (choice == 0 || choice == N) break;
+
+        system("cls");
+        printSectionHeader("MEDICINE STORAGE");
+
+        switch (choice) {
+            case 1: {
+                MedicineItem item;
+                cout << "  Medicine Name           : ";
+                getline(cin, item.name);
+                if (item.name.empty()) {
+                    showError("Name cannot be empty.");
+                    break;
+                }
+
+                cout << "  Quantity                : ";
+                while (!(cin >> item.quantity) || item.quantity <= 0) {
+                    cin.clear(); cin.ignore(1000, '\n');
+                    cout << "  Invalid quantity. Enter a positive number: ";
+                }
+                cin.ignore();
+
+                cout << "  Import Date (dd/mm/yyyy): ";
+                getline(cin, item.importDate);
+
+                pushMedicine(s, item);
+                showSuccess("\"" + item.name + "\" added to storage. Total types: "
+                            + to_string(s.count) + ".");
+                break;
             }
-            cin.ignore();
-
-            cout << "  Import Date (dd/mm/yyyy): "; getline(cin, item.importDate);
-            pushMedicine(s, item);
-            cout << "  [OK] \"" << item.name << "\" added to storage.\n";
-
-        } else if (choice == 2) {
-            MedicineItem out;
-            if (popMedicine(s, out)) {
-                cout << "  [OK] Dispensed: " << out.name
-                     << "  (Qty: " << out.quantity
-                     << ", Imported: " << out.importDate << ")\n";
-            } else {
-                cout << "  [!] Storage is empty.\n";
+            case 2: {
+                MedicineItem out;
+                if (popMedicine(s, out)) {
+                    showSuccess("Dispensed: " + out.name +
+                                "  (Qty: " + to_string(out.quantity) +
+                                ", Imported: " + out.importDate + ")");
+                } else {
+                    showError("Storage is empty - nothing to dispense.");
+                }
+                break;
             }
-        } else if (choice == 3) {
-            peekMedicine(s);
-        } else if (choice == 4) {
-            displayMedicineStack(s);
-        } else if (choice != 0) {
-            cout << "  [!] Invalid choice.\n";
+            case 3:
+                peekMedicine(s);
+                break;
+            case 4:
+                displayMedicineStack(s);
+                break;
         }
-
-        if (choice != 0) { cout << "\n  Press any key to continue..."; cin.get(); system("cls"); }
-    } while (choice != 0);
+        medicinePause();
+    }
 }
