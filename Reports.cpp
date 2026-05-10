@@ -13,7 +13,6 @@ void exportReport(Patient patientList[], int n, int stats[31][12], const string&
         return;
     }
 
-    // Timestamp
     time_t now = time(nullptr);
     char timebuf[64];
     strftime(timebuf, sizeof(timebuf), "%Y-%m-%d %H:%M:%S", localtime(&now));
@@ -25,7 +24,6 @@ void exportReport(Patient patientList[], int n, int stats[31][12], const string&
     file << "  Total Patients : " << n << "\n";
     file << "============================================================\n\n";
 
-    // --- Section 1: Patient List ---
     file << "------------------------------------------------------------\n";
     file << "  SECTION 1 — PATIENT RECORDS\n";
     file << "------------------------------------------------------------\n";
