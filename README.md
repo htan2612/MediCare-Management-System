@@ -1,9 +1,16 @@
 # Clinic Management System - 2026
 
 > **Course:** Fundamental of Programming
-> **Lecturer:** M.Sc. Tran Duy Quang
+>
+> **Lecturer:** M\.Sc. Tran Duy Quang
+>
 > **Class:** 25CA - Faculty of Information Technology
+>
 > **Team:** Huynh Thanh An - Luong Duy Phuoc - Ly Si Vi - Tran Ngoc My Trinh
+>
+> **GitHub:** https://github.com/htan2612/MediCare-Management-System
+>
+> **Demo:** https://youtu.be/bFWsKmB1psU
 
 ---
 
