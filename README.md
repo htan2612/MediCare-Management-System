@@ -10,7 +10,7 @@
 >
 > **GitHub:** https://github.com/htan2612/MediCare-Management-System
 >
-> **Demo:** https://youtu.be/bFWsKmB1psU
+> **Demo:** https://youtu.be/_v25qXgcDps
 
 ---
 
